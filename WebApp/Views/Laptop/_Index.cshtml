@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Models.LaptopModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="my-main">
+
+</div>
+
+<h1>Laptops</h1>
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var item in Model)
+        { 
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src=" @Html.DisplayFor(modelItem => item.Img_Url)" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Product_Name)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                    <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-outline-primary btn-lg btn-block">Get Details</a>
+                </div>
+            </div>
+        </div>
+        }
+        </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
