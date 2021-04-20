@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly AppDbContext _context;
@@ -24,20 +25,37 @@ namespace WebApp.Controllers
             _securityManager = _sec;
             _loginManager = _log;
         }
-        [Authorize]
+       
         // GET: Order
+        
         public async Task<IActionResult> Index()
         {
             var user = await this._securityManager.GetUserAsync(User);
             /*await _context.DetailsModel.
             return View(await _context.DetailsModel.AllAsync(m => m.Name == user.UserName));*/
-
+            List<OrderDetails> l = new List<OrderDetails>();
             var list = await _context.DetailsModel.ToListAsync();
+           // var list  = _context.DetailsModel.Where(ord => ord.Name == User.Identity.Name);
+           // var list = await _context.DetailsModel.AnyAsync(User.Identity.Name);
+           // _context.DetailsModel.
              list = list.Where(ord => ord.Name == user.UserName).ToList();
-            return View(list);
+            foreach (var item in list)
+            {
+                var laptopModel = await _context.LaptopModel
+                .FirstOrDefaultAsync(m => m.ID == item.Pid);
+                OrderDetails ord = new OrderDetails();
+                ord.Product = laptopModel;
+                ord.Address = item.Address;
+                ord.Name = item.Name;
+                ord.Oid = item.Oid;
+                ord.Phone = item.Phone;
+                ord.Pid = item.Pid;
+                l.Add(ord);
+            }
+           
+            return View(l);
         }
-        [Authorize]
-        // GET: Order/Details/5
+       
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -60,9 +78,9 @@ namespace WebApp.Controllers
 
             return View(ord);
         }
-        [Authorize]
+    
         
-        // GET: Order/Create
+       
         public async Task<IActionResult> CreateAsync(string id)
         {
             ViewBag.Pid = id;
@@ -84,7 +102,7 @@ namespace WebApp.Controllers
         // POST: Order/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create( OrderDetails orderDetails)
@@ -98,86 +116,8 @@ namespace WebApp.Controllers
             return View(orderDetails);
         }
 
-        // GET: Order/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var orderDetails = await _context.DetailsModel.FindAsync(id);
-            if (orderDetails == null)
-            {
-                return NotFound();
-            }
-            return View(orderDetails);
-        }
-
-        // POST: Order/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Oid,Name,Address,Phone")] OrderDetails orderDetails)
-        {
-            if (id != orderDetails.Oid)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(orderDetails);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderDetailsExists(orderDetails.Oid))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(orderDetails);
-        }
-
-        // GET: Order/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var orderDetails = await _context.DetailsModel
-                .FirstOrDefaultAsync(m => m.Oid == id);
-            if (orderDetails == null)
-            {
-                return NotFound();
-            }
-
-            return View(orderDetails);
-        }
-
-        // POST: Order/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var orderDetails = await _context.DetailsModel.FindAsync(id);
-            _context.DetailsModel.Remove(orderDetails);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
+        
         private bool OrderDetailsExists(string id)
         {
             return _context.DetailsModel.Any(e => e.Oid == id);

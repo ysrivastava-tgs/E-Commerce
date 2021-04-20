@@ -4,49 +4,51 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>OrderDetails</h4>
-<hr />
-<div class="row">
-    <div class="col-md-8">
-        <img src=@Model.Product.Img_Url class="img-fluid" alt="Responsive image">
-        <h5>Name of the Product: @Model.Product.Product_Name</h5>
-        <h5>Description: @Model.Product.Description</h5>
-        <h5>Price: @Model.Product.Price</h5>
-    </div>
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           <div class="form-group">
-                <label asp-for="Pid" class="control-label"></label>
-                <input asp-for="Pid" class="form-control" value=@Model.Product.ID readonly/>
-                <span asp-validation-for="Oid" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" value=@Model.Name readonly/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" value=@Model.Address readonly />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" value=@Model.Phone readonly/>
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Confirm" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="container">
+    <h4>OrderDetails</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <img src=@Model.Product.Img_Url class="img-fluid" alt="Responsive image">
+            <h5>Name of the Product: @Model.Product.Product_Name</h5>
+            <h5>Description: @Model.Product.Description</h5>
+            <h5>Price: @Model.Product.Price</h5>
+        </div>
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Pid" class="control-label"></label>
+                    <input asp-for="Pid" class="form-control" value=@Model.Product.ID readonly />
+                    <span asp-validation-for="Oid" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" value=@Model.Name readonly />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input asp-for="Address" class="form-control" value=@Model.Address readonly />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" value=@Model.Phone readonly />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Confirm" class="btn btn-primary" class="btn btn-outline-danger" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 </div>
 
 @section Scripts {

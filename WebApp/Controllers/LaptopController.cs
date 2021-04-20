@@ -27,7 +27,11 @@ namespace WebApp.Controllers
             
             return View("_Index",await _context.LaptopModel.ToListAsync());
         }
+        public async Task<IActionResult> AdminIndex()
+        {
 
+            return View(await _context.LaptopModel.ToListAsync());
+        }
         // GET: Laptop/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -47,7 +51,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Laptop/Create
-        [Authorize]
+       [Authorize(Roles ="Admin")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +60,7 @@ namespace WebApp.Controllers
         // POST: Laptop/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+       [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Product_Name,Img_Url,Price,Description")] LaptopModel laptopModel)
@@ -69,7 +73,7 @@ namespace WebApp.Controllers
             }
             return View(laptopModel);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Laptop/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -120,7 +124,7 @@ namespace WebApp.Controllers
             }
             return View(laptopModel);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Laptop/Delete/5
         public async Task<IActionResult> Delete(string id)
         {

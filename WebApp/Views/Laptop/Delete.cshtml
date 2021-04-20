@@ -21,7 +21,9 @@
             @Html.DisplayNameFor(model => model.Img_Url)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Img_Url)
+           
+                <img src=@Model.Img_Url class="img-fluid img-thumbnail" />
+          
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Price)

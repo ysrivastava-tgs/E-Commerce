@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DataLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using System;
@@ -11,6 +13,7 @@ namespace WebApp.Controllers
 {
     public class AccountController : Controller
     {
+        
         private readonly UserManager<ApplicationUser> _securityManager;
         private readonly SignInManager<ApplicationUser> _loginManager;
         //2
@@ -20,7 +23,10 @@ namespace WebApp.Controllers
             _loginManager = loginManager;
            
         }
-
+        public string AccessDenied(string url)
+        {
+            return "Access Denied";
+        }
         //3
         [HttpGet]
         [AllowAnonymous]
@@ -36,31 +42,51 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(Register model)
         {
-            if (ModelState.IsValid)
+            using (var context = new AppDbContext())
             {
-                var user = new ApplicationUser
+                if (ModelState.IsValid)
                 {
-                    UserName = model.Name,
-                    Email = model.Email,
-                    Address = model.Address,
-                    PhoneNumber = model.Phone
-                };
-                var result = await _securityManager.CreateAsync(user, model.Password);
-                
-                if (result.Succeeded)
-                {
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.Name,
+                        Email = model.Email,
+                        Address = model.Address,
+                        PhoneNumber = model.Phone
+                    };
+                    var result = await _securityManager.CreateAsync(user, model.Password);
+
+                    /* var roleStore = new RoleStore<IdentityRole>(context);
+                     var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                 var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                 var userStore = new UserStore<ApplicationUser>(context);
+                 var userManager = new UserManager<ApplicationUser>(userStore);
+                     var userStore = new UserStore<ApplicationUser>(context);
+                     var userManager = new UserManager<ApplicationUser>(userStore);*/
+
+                    var identity_result = result.Errors.ToList();
                    
-                    
-                    Console.WriteLine("Hello world");
-                    await _loginManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction(nameof(LaptopController.Index), "Laptop");
+                    if (identity_result.Count > 0)
+                    {
+                        ViewBag.Error = identity_result;
+                        return View();
+                    }
+
+                    if (result.Succeeded)
+                    {
+                        await _securityManager.AddToRoleAsync(user, "Admin");
+                        Console.WriteLine("Hello world");
+                        await _loginManager.SignInAsync(user, isPersistent: false);
+                        return RedirectToAction(nameof(LaptopController.Index), "Laptop");
+
+                    }
+                 
 
                 }
-            // ==
-              
             }
 
-            return View(model);
+                return View(model);
         }
 
         //5
@@ -88,6 +114,13 @@ namespace WebApp.Controllers
                     
                     return RedirectToReturnUrl(returnUrl);
                 }
+                if(!result.Succeeded)
+                {
+                    ViewBag.Failed = "Invalid Credentials";
+                    return View();
+                }
+             
+
             }
 
 
