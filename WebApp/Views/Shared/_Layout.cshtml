@@ -52,34 +52,36 @@
             </form>
         </li>-->
 
-                        var list = await UserManager.GetRolesAsync(user);
-                        if (list.Count > 0 && list[0] == "Admin")
-                        {
-                            <ul class="navbar-nav flex-grow-1">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Laptop" asp-action="AdminIndex">Product List For Admin</a>
-                                </li>
-                              
-                               
-                            </ul>
-                        }
-@**@
-                        <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
+
+                        @**@
+                        <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-nav flex-row-reverse">
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-area="">@User.Identity.Name</a>
+                                    <a class="nav-link text-dark" asp-area="">@User.Identity.Name</a>
                                 </li>
                                 <li class="nav-item">
                                     <button type="submit" class="btn btn-link nav-link"><i class="fa fa-sign-out"></i>&nbsp;Log out</button>
                                 </li>
                             </ul>
                         </form>
+                        var list = await UserManager.GetRolesAsync(user);
+                        if (list.Count > 0 && list[0] == "Admin")
+                        {
+                            <ul class="navbar-nav flex-row-reverse">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Laptop" asp-action="AdminIndex">Laptops</a>
+                                </li>
+
+
+                            </ul>
+                        }
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Order" asp-action="Index">My Orders</a>
                             </li>
 
                         </ul>
+
                     }
                     else
                     {
@@ -92,7 +94,13 @@
                             </li>
                         </ul>
                     }
+                    <ul class="navbar-nav flex-row-reverse">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Laptop" asp-action="UserIndex">Laptops</a>
+                        </li>
 
+
+                    </ul>
                 </div>
             </div>
         </nav>

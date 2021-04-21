@@ -22,15 +22,20 @@ namespace WebApp.Controllers
         }
         
         // GET: Laptop
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             
-            return View("_Index",await _context.LaptopModel.ToListAsync());
+            return View("_Index");
         }
         public async Task<IActionResult> AdminIndex()
         {
 
             return View(await _context.LaptopModel.ToListAsync());
+        }
+        public async Task<IActionResult> UserIndex()
+        {
+
+            return View("Index2",await _context.LaptopModel.ToListAsync());
         }
         // GET: Laptop/Details/5
         public async Task<IActionResult> Details(string id)
