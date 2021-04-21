@@ -3,7 +3,12 @@
 @{
     ViewData["Title"] = "Register";
 }
+<style>
+    .error{
+        color: red;
+    }
 
+</style>
 <div class="container">
     <h1>Register</h1>
 
@@ -13,7 +18,7 @@
 
         @foreach (var err in ViewBag.Error as List<IdentityError>)
         {
-            <span>@err.Description</span>
+            <span class="error">@err.Description</span>
            
 
         }
